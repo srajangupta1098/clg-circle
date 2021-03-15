@@ -10,6 +10,7 @@ var AlumniSchema = require('./schema/addalumniSchema');
 var ClubSchema = require('./schema/addclubSchema');
 var EventSchema = require('./schema/eventSchema');
 var ParticipantSchema = require('./schema/clubparticipantSchema');
+const { useRadioGroup } = require('@material-ui/core');
  
 
 
@@ -346,10 +347,10 @@ exports.getClubById= async (req, res) => {
   exports.addClubById= function (req,res){
       const id = req.params.id;
       EventSchema.create(req.body)
-      ParticipantSchema.create(req.body)
-      .then(function(foundevent,foundparticipants){
+      
+      .then(function(foundevent){
 
-        return ClubSchema.findByIdAndUpdate({_id:id},{event:foundevent._id},{participant:foundparticipants._id},{new:true});
+        return ClubSchema.findByIdAndUpdate({_id:id},{event:foundevent._id},{new:true});
       })
       .then(function(foundClub){
           res.json(foundClub);
@@ -375,6 +376,135 @@ exports.getClubById= async (req, res) => {
     })
 }
 
+exports.participantregistration = async(req,res)=>{
+    await ClubSchema.findOne({name:req.body.name}).then((club)=>{
+        
+        const newData=new  ParticipantSchema(req.body)
+        newData.save((error,result)=>{
+            
+            if(error)
+        {
+            console.log(error)
+            return res.status(400).send({error:'Data Error',message:"Try again"})
+        }
+        else
+        {   
+
+            console.log("ASD:",result)
+            var link = `localhost:3000/validationform/${result._id}`
+            var transporter=nodemailer.createTransport({
+                service: 'gmail',
+                secure:false,
+            auth: {
+                user: 'thedailyofferjuet@gmail.com',
+                pass: 'cpcolony@128'
+            }
+            });
+        
+            let mailOptions ={
+                from :'TheCollegeCircle',
+                to:club.facultyemail,
+                subject:'mail for authentication at college circle',
+                text:link
+            };
+            transporter.sendMail(mailOptions,function(error,result){
+                if(error)
+                {
+                    console.log(error)
+                    return res.status(500).json({RESULT:false})
+                }
+                else{
+                    console.log('Email send')
+                    return res.status(201).json({success:true,message:"request send"})
+                }
+            })
+        }
+    })
+        })
+        
+    }
+
+
+exports.getparticipantregistration = async(req,res)=>{
+    const id = req.params.id
+    console.log("ID:",id)
+    ParticipantSchema.findById(id,(error,result)=>{
+        if(error)
+        {
+            console.log("ASDF")
+            return res.status(422).send({message:"Not found"})
+        }
+        else
+        {
+            return res.status(200).send({message:"data retrieved",result})
+        }
+    });
+}
+
+exports.deleteparticipantRegistration = async(req,res)=>{
+    const id = req.params.id
+    const name=req.params.name
+    console.log("ASD:",id)
+    await ParticipantSchema.findByIdAndDelete({_id:id},(error,result)=>{
+        if(error)
+        {
+            return res.status(422).send({message:"Not found"})
+        }
+        else
+        {
+            ClubSchema.findOne({name}).then((error,result))
+            {
+                if(error){
+                    return res.status(403).send({message:"not found"})
+                }
+                else{
+                    result.participants.filter(user_id=>user_id!==id)
+                    result.save((error,result)=>{
+                        if(error){
+                            return res.status(403).send({message:"not found"})
+                        }
+                        else{
+                            return res.status(200).send({message:"data retrieved"})
+                        }
+                    })
+                }
+            }
+            return res.status(200).send({message:"data retrieved",result})
+        }
+    })
+}
+
+exports.approveparticipantRegistration = async(req,res)=>{
+    const id = req.params.id
+    const name=req.params.name
+    await ParticipantSchema.findByIdAndUpdate({_id:id},{approve:true},(error,result)=>{
+        if(error)
+        {
+            return res.status(422).send({message:"Not found"})
+        }
+        else
+        {
+            ClubSchema.findOne({name}).then((error,result))
+            {
+                if(error){
+                    return res.status(403).send({message:"not found"})
+                }
+                else{
+                    result.participants.push(id)
+                    result.save((error,result)=>{
+                        if(error){
+                            return res.status(403).send({message:"not found"})
+                        }
+                        else{
+                            return res.status(200).send({message:"data retrieved"})
+                        }
+                    })
+                }
+            }
+            return res.status(200).send({message:"approved"})
+        }
+    })
+}
 
 exports.getCollegename = async(req,res)=>{
     await collegeRegistrationSchema.find({approve:true},{collegename:1},(error,result)=>{

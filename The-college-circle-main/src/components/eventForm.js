@@ -105,7 +105,7 @@ export default function FormTable(props) {
         formData.append('time',body.time)
         
 
-        await addalumni(formData)
+        await addClubById(formData)
         .then(res=>{
           alert("event saved")
         handleClose()})

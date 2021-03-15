@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {getClubById} from './connection'
 import { Grid } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
+import Form from './eventForm'
+import Form1 from './Register_Participant_Form'
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles';
@@ -85,6 +87,9 @@ export default function Clubinfo(){
             alert("you are not authorized to add event")
         }
     }
+    const apply=()=>{
+        setOpen(true)
+    }
 
     const [data,setData] = React.useState([])
 
@@ -128,6 +133,17 @@ export default function Clubinfo(){
                                 {data.moredesc}
                             </p>
                             <hr />
+                            <div style={{display:"flex", flexDirection:"column",width:"100%",alignItems:"center"}}>
+                                <div className={classes.buttondesign}>
+                                <Button 
+                                    variant="contained" 
+                                    color="secondary"
+                                    onClick={()=>apply()} 
+                                    >
+                                    Apply Club
+                                </Button>
+                                </div>
+                            </div>
                             <div style={{display:"flex",flexDirection:"column",width:"100%",alignItems:"center"}}>
                             <div className={classes.buttondesign}>
                                 <Button 
@@ -176,6 +192,7 @@ export default function Clubinfo(){
                 </div>
             </div>
             <Form open={open} setOpen={setOpen}/>
+            <Form1 open={open} setOpen={setOpen}/>
         </section>
     )
     

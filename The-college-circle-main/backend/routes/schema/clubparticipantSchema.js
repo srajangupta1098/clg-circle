@@ -6,7 +6,7 @@ var clubparticipantSchema = new mongoose.Schema({
     rollno:{type:String,required:true},
     year:{type:Number,required:true},
     branch: {type:String,required:true},
-    
+    clubname:{type:String,required:true},
     collegename:{type:String,required:true}
 },{collection:'Participant'});
  
