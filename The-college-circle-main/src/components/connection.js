@@ -7,6 +7,7 @@ export const staffregistration = (payload)=>api.post('/staffregistrationform',pa
 export const getcollegeregistrationform = (id) => api.get(`/getcollegeregistrationform/${id}`)
 export const deletecollegeregistration = (id) => api.delete(`/deletecollegeregistration/${id}`)
 export const approvecollegeregistration = (id) => api.get(`/approvecollegeregistration/${id}`)
+export const participantregistration = (payload)=>api.post('/participantregistrationform',payload)
 export const getparticipantregistrationform = (id) => api.get(`/getparticipantregistrationform/${id}`)
 export const deleteparticipantRegistration = (id) => api.delete(`/deleteparticipantRegistration/${id}`)
 export const approveparticipantRegistration = (id) => api.get(`/approveparticipantRegistration/${id}`)
