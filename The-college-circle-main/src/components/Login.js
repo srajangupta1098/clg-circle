@@ -13,7 +13,8 @@ import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import {useForm} from "react-hook-form"
 import {login} from './connection'
-
+import {withRouter} from 'react-router-dom'
+ 
 const useStyles = makeStyles((theme) => ({
     root:{
         height:"100vh",
@@ -51,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
       },
 }))
 
-export default function Login_Form(props){
+function Login_Form(props){
     const classes = useStyles()
     const {register,handleSubmit,errors} = useForm({criteriaMode:"all"})
     const [membertype,setMembertype] = React.useState("Student");
@@ -73,8 +74,10 @@ export default function Login_Form(props){
             localStorage.setItem("collegename",e.collegename)
             localStorage.setItem("email",e.email)
             localStorage.setItem("membertype",e.membertype)
-            props.history.push({pathname:"/the_college_circle"})})
+            props.changeView()
+            props.history.push({pathname:"/The_College_Circle"})})
         .catch(error=>{
+            debugger
             if(error.response.data.message === "wrong password")
             {
                 alert("wrong password, please try again")
@@ -156,3 +159,5 @@ export default function Login_Form(props){
         </div>
     )
 }
+
+export default withRouter(Login_Form)

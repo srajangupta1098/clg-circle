@@ -327,17 +327,21 @@ exports.getclub = async(req,res)=>{
 
 
 exports.getClubById= async (req, res) => {
-    const id = req.params.id;
+    const collegename = req.params.name;
     
-    await ClubSchema.findById({_id:id}).populate("events").populate("participants").exec((error,foundClub)=>{
+    await ClubSchema.find({collegename:collegename}).exec((error,result)=>{
 
-        
+        console.log("ledd")
       if (error)
         { 
            return res.status(402).send({message:"club not found"}); 
         }
+      else
+      {
+        return res.status(200).send({result})
+      }
 
-      return res.status(200).send({foundClub})
+      
     })
   
     

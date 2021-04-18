@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
+const Schema=mongoose.Schema
  
-var clubSchema = new mongoose.Schema({
+var clubSchema = new Schema({
     name: {type:String,required:true},
     desc: {type:String,required:true},
     moredesc:{type:String,required:true},

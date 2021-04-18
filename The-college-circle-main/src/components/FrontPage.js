@@ -2,6 +2,7 @@ import React from 'react';
 import Divider from '@material-ui/core/Divider';
 import {makeStyles} from '@material-ui/core/styles'
 import clsx from 'clsx';
+import {withRouter} from 'react-router-dom'
 
 const useStyles = makeStyles((theme)=>({
     conatiner:{
@@ -52,6 +53,7 @@ const useStyles = makeStyles((theme)=>({
     
 }))
 function FrontPage(props){
+    props.changeView()
     const classes = useStyles()
     const changePage=(form)=>{
         if(form === "RCF")
@@ -90,4 +92,4 @@ function FrontPage(props){
         </div>
     )
 }
-export default FrontPage;
+export default withRouter(FrontPage);

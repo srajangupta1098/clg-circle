@@ -1,14 +1,16 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import {getClubById} from './connection'
+//import {getClubById} from './connection'
 import { Grid } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
 import Form from './eventForm'
-import Form1 from './Register_Participant_Form'
+import Forme from './Register_Participant_Form'
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles';
 import {getClubById} from './connection'
+import {withRouter} from 'react-router-dom';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -72,10 +74,12 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 
-export default function Clubinfo(){
+function Clubinfo(){
     
     const classes = useStyles()
+    
     const [open, setOpen] = React.useState(false)
+    const [aopen, setAopen]= React.useState(false)
     const addEvent=()=>{
         var membertype = localStorage.getItem("membertype")
         if(membertype === 'Faculty')
@@ -87,32 +91,34 @@ export default function Clubinfo(){
             alert("you are not authorized to add event")
         }
     }
-    const apply=()=>{
-        setOpen(true)
-    }
+     const apply=()=>{
+        setAopen(true)
+        
+     }
 
     const [data,setData] = React.useState([])
 
-    const geteventData = React.useCallback(()=>{
-        var clubid = localStorage.getItem("id")
-        getClubById(clubid)
+    const getclubData = React.useCallback(()=>{
+        var collegename = localStorage.getItem("collegename")
+        getClubById(collegename)
         .then(async(res)=>{
-            // console.log("L",res)
+            //console.log("L",res)
             await setData(res.data.result)
         })
         .catch(err=>console.log(err))
-    },[localStorage.getItem("clubid")])
+    },[localStorage.getItem("collegename")])
     React.useEffect(()=>{
-        geteventData()
-    },[geteventData])
+        getclubData()
+    },[getclubData])
 
     return(
         <section id="clubDetails">
             <div className={classes.uppersection}>
                 <div className="row">
                     <div className="col-md-6">
-                    image={`http://localhost:3001/images/${data.imgName}`}
-                    title={data.imgName}
+
+                        <img src={`http://localhost:3001/images/${data.imgName}`} />
+                        {/* title={data.imgName}*/}  
                     </div>
                 </div>
             </div>
@@ -122,10 +128,10 @@ export default function Clubinfo(){
                         <div className={classes.club}>
                             <h1 className={classes.title}>{data.name}</h1>
                             <div className={classes.clubinfo}>
-                                <span><i className="fas fa-user">Faculty Head {data.facultyhead}</i></span>
+                                <span><i className="fas fa-user">{data.facultyhead}</i></span>
                                 <span><i className="fas fa-envelope-square">Faculty Email {data.facultyemail}</i></span>
                                 <span><i className="fas fa-user">Student Head {data.studenthead}</i></span>
-                                <span><i className="fas fa-users">Active Participants {data.participants}</i></span>
+                                {/* <span><i className="fas fa-users">Active Participants {data.participants}</i></span> */}
                             </div>
                             <p className={classes.clubdescription}>
                                 {data.desc}
@@ -192,8 +198,10 @@ export default function Clubinfo(){
                 </div>
             </div>
             <Form open={open} setOpen={setOpen}/>
-            <Form1 open={open} setOpen={setOpen}/>
+            <Forme aopen={aopen} setAopen={setAopen}/>
+             
         </section>
     )
     
 }
+export default withRouter(Clubinfo)

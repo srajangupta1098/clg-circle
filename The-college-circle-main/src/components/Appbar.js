@@ -29,13 +29,11 @@ const useStyles = makeStyles((theme) => ({
 function ButtonAppBar(props) {
   const classes = useStyles();
 
-  const changeView = (nextview) =>{
-    props.changeView(nextview)
-  }
 
   const Logout = () =>{
-    localStorage.removeItem("collegename")
+    localStorage.clear()
     props.history.replace({pathname:"/"})
+    props.changeView()
   }
 
   return (
@@ -43,11 +41,11 @@ function ButtonAppBar(props) {
       <AppBar position="static" style={{background:'#f44336'}}>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            <span style={{cursor:"pointer"}} onClick={()=>changeView('Post')}>{localStorage.getItem("collegename")}</span>
+            <span style={{cursor:"pointer"}} onClick={()=>props.history.push({pathname:"/The_College_Circle"})}>{localStorage.getItem("collegename")}</span>
           </Typography>
-          <Button color="inherit" onClick={()=>changeView('Placement')}>Placement</Button>
-          <Button color="inherit" onClick={()=>changeView('club')}>Clubs</Button>
-          <Button color="inherit" onClick={()=>props.changeView('alumni')}>Alumini</Button>
+          <Button color="inherit" onClick={()=>props.history.push({pathname:"/The_College_Circle/Placement"})}>Placement</Button>
+          <Button color="inherit" onClick={()=>props.history.push({pathname:"/The_College_Circle/Club"})}>Clubs</Button>
+          <Button color="inherit" onClick={()=>props.history.push({pathname:"/The_College_Circle/Alumni"})}>Alumini</Button>
           <Button onClick={Logout} color="inherit">Logout</Button>
         </Toolbar>
       </AppBar>

@@ -38,9 +38,10 @@ const useStyles = makeStyles((theme) => ({
   
   
   }));
-export default function PostPage(){
+export default function PostPage(props){
 
     const classes = useStyles()
+    // React.useEffect(()=>{props.changeView()},[localStorage.getItem('email')])
     const [open, setOpen] = React.useState(false);
     const [post,setPost]=React.useState([])
     const addpost=()=>{

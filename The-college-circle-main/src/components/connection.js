@@ -32,7 +32,7 @@ export const addclub = (payload) =>api.post('/addclub',payload, {
     },
 })
 export const getclub = (name) => api.get(`/getclub/${name}`)
-export const getClubById = (id)=> api.get(`/getClubById/${id}`)
+export const getClubById = (name)=> api.get(`/getClubById/${name}`)
 export const addClubById = (payload) =>api.post('/addClubById',payload,{
     headers: {
         'content-type': 'multipart/form-data',
