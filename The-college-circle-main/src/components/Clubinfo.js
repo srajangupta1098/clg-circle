@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUser, faEnvelope } from '@fortawesome/free-regular-svg-icons'
 //import {getClubById} from './connection'
 import { Grid } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
@@ -42,35 +43,34 @@ const useStyles = makeStyles((theme) => ({
             palette:{
                main:'#fafafa'
             },
-        },
+        }},
         club:{
-            title:{
-                marginBottom: '5px',
-                fontSize: '32px',
-                fontWeight: 700,
-            },
-            clubinfo:{
-                marginBottom: '20px',
-                fontWeight: 300,
-                fontSize: '16px',
-            
-            span:{
-                marginRight:'10px',
-            },
-            i:{
-                marginRight:'2px',
-            },
         },
+        
+        title:{
+            marginBottom: '5px',
+            fontSize: '32px',
+            fontWeight: 700,
+        },
+        
         clubdescription:{
             fontWeight: 300,
             marginBottom: '30px',
         },
-        },
-    },
         
-    
-
-    
+        clubinfo:{
+            marginBottom: '20px',
+            fontWeight: 300,
+            fontSize: '16px',
+            display:'flex',
+            flexDirection:'column',
+    },
+    iconButton:{
+        display:'flex',
+        justifyContent:'space-between',
+        width:"30vw",
+        textAlign:'left'
+    }
   }));
 
 
@@ -102,22 +102,27 @@ function Clubinfo(){
         var collegename = localStorage.getItem("collegename")
         getClubById(collegename)
         .then(async(res)=>{
-            //console.log("L",res)
             await setData(res.data.result)
+            console.log("L",res)
         })
         .catch(err=>console.log(err))
     },[localStorage.getItem("collegename")])
-    React.useEffect(()=>{
+    
+    useEffect(()=>{
         getclubData()
-    },[getclubData])
+    },[])
 
+    if(data.length === 0)
+    {
+        return <div>loading...</div>
+    }
+    else{
     return(
         <section id="clubDetails">
             <div className={classes.uppersection}>
                 <div className="row">
                     <div className="col-md-6">
-
-                        <img src={`http://localhost:3001/images/${data.imgName}`} />
+                        <img src={`http://localhost:3001/images/${data[0].imgName}`} />
                         {/* title={data.imgName}*/}  
                     </div>
                 </div>
@@ -126,17 +131,17 @@ function Clubinfo(){
                 <div className="row">
                     <div className="col-md-8">
                         <div className={classes.club}>
-                            <h1 className={classes.title}>{data.name}</h1>
+                            <h1 className={classes.title}>{data[0].name}</h1>
                             <div className={classes.clubinfo}>
-                                <span><i className="fas fa-user">{data.facultyhead}</i></span>
-                                <span><i className="fas fa-envelope-square">Faculty Email {data.facultyemail}</i></span>
-                                <span><i className="fas fa-user">Student Head {data.studenthead}</i></span>
+                                <span className={classes.iconButton}><FontAwesomeIcon icon={faUser}/>{data[0].facultyhead}</span>
+                                <span className={classes.iconButton}><FontAwesomeIcon icon={faEnvelope}/>{data[0].facultyemail}</span>
+                                <span className={classes.iconButton}><FontAwesomeIcon icon={faUser}/>Student Head {data[0].studenthead}</span>
                                 {/* <span><i className="fas fa-users">Active Participants {data.participants}</i></span> */}
                             </div>
                             <p className={classes.clubdescription}>
-                                {data.desc}
+                                {data[0].desc}
                                 <br/>
-                                {data.moredesc}
+                                {data[0].moredesc}
                             </p>
                             <hr />
                             <div style={{display:"flex", flexDirection:"column",width:"100%",alignItems:"center"}}>
@@ -203,6 +208,7 @@ function Clubinfo(){
              
         </section>
     )
+}
     
 }
 export default withRouter(Clubinfo)

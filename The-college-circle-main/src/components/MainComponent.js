@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {BrowserRouter as Router,Redirect,Route,Switch} from 'react-router-dom'
 import FrontPage from './FrontPage';
 import RCF from './Register_College_Form';
@@ -30,6 +30,11 @@ export default function Main(props){
             setView(null);
         }
     }
+    
+    useEffect(() => {
+        changeView()
+    },[localStorage.length])
+
     return(
         <>
         {view}

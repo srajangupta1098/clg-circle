@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -84,16 +84,12 @@ const DialogActions = withStyles((theme) => ({
 export default function FormTable(props) {
 
   const {register,handleSubmit} = useForm()
-  //const [img,setImg] = React.useState({icon:"",file:""})
-
   const handleClose = () => {
-    props.setOpen(false);
+    setOpen(false)
     //setImg({icon:"",file:""})
   };
 
   const onSubmit = async(body) =>{
-    
-
     var formData=new FormData();
         
         formData.append('collegename',localStorage.getItem("collegename"))
@@ -102,23 +98,23 @@ export default function FormTable(props) {
         formData.append('year',body.year)
         formData.append('branch',body.branch)
         formData.append('clubname',body.clubname)
-        setOpen(true)
-        setAopen({backdrop:true})
-
+        handleClose();
+        setAopen({backdrop:true});
         await participantregistration(formData)
         .then(res=>{
-          alert("participant need to wait")
-        handleClose()
-        setAopen({backdrop:false,snackbar:true})})
+          alert("participant need to wait")})
         .catch(err=>{alert("try again");console.log("Error:",err.response)})
+        setAopen({backdrop:false})
+        setAopen({snackbar:true})
         
   }
+  // const { aopen, setAopen } = props
   const [open, setOpen] = React.useState(false);
   const [aopen, setAopen] = React.useState({backdrop:false,snackbar:false});
 
-//   React.useEffect(()=>{
-//       console.log("L:",pic)
-//   },[pic])
+  useEffect(()=>{
+    setOpen(props.aopen)
+  },[props])
 
   return (
     <div>
@@ -126,7 +122,7 @@ export default function FormTable(props) {
            onClose={handleClose} 
            TransitionComponent={Transition}
            aria-labelledby="customized-dialog-title" 
-            open={props.open}
+            open={open}
             className={classes.dialog}
         >
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
@@ -199,14 +195,14 @@ export default function FormTable(props) {
         </DialogActions>
         </form>
       </Dialog>
-      <Backdrop className={classes.backdrop} open={open}>
-          {aopen.backdrop?<CircularProgress color="inherit" />:aopen.snackbar?
+      <Backdrop className={classes.backdrop} open={aopen.backdrop}>
+          <CircularProgress color="inherit" />
+      </Backdrop>
         <Snackbar open={aopen.snackbar} autoHideDuration={6000}>
             <Alert severity="success">
                 Your request has been send for validation
             </Alert>
-        </Snackbar>:null}
-      </Backdrop>
+        </Snackbar>
     </div>
   );
 }

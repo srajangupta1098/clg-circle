@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Divider from '@material-ui/core/Divider';
 import {makeStyles} from '@material-ui/core/styles'
 import clsx from 'clsx';
@@ -53,7 +53,10 @@ const useStyles = makeStyles((theme)=>({
     
 }))
 function FrontPage(props){
-    props.changeView()
+
+    useEffect(()=>{
+        props.changeView()
+    })
     const classes = useStyles()
     const changePage=(form)=>{
         if(form === "RCF")
