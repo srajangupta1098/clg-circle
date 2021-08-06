@@ -1,5 +1,5 @@
 import React from 'react'
-import {getparticipantregistration,deleteparticipantRegistration,approveparticipantRegistration} from './connection'
+import {getparticipantregistrationform,deleteparticipantRegistration,approveparticipantRegistration} from './connection'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
@@ -59,7 +59,8 @@ function ValidationParticipationForm(props){
     
     const extractFormData=React.useCallback(async()=>{
         let id = props.match.params.id
-        await getparticipantregistration(id)
+        console.log("id",id)
+        await getparticipantregistrationform(id)
         .catch(e=>{alert("Not Found")})
         .then(async(result)=>{
             console.log("ASD",result)
@@ -97,6 +98,7 @@ function ValidationParticipationForm(props){
 
     if(body === null || Object.keys(body).length === 0)
     {
+        console.log("ASD",body)
         return(
             <div style={{display:"flex",justifyContent:"center"}}>
                 <h1>NOT FOUND</h1>
@@ -105,6 +107,7 @@ function ValidationParticipationForm(props){
     }
     else
     {
+        console.log("id",body)
         return(
             <div className={classes.root}>
                 <Paper className={classes.container} elevation={3}>
@@ -128,7 +131,7 @@ function ValidationParticipationForm(props){
                             InputProps={{
                                 readOnly: true,
                               }}
-                            defaultValue={body.address}
+                            defaultValue={body.studentname}
                             name="studentname"
                             id="outlined-required"
                             label="Student name"
@@ -141,7 +144,7 @@ function ValidationParticipationForm(props){
                             InputProps={{
                                 readOnly: true,
                               }}
-                            defaultValue={body.city}
+                            defaultValue={body.rollno}
                             name="rollno"
                             id="outlined-required"
                             label="Roll no"
@@ -153,7 +156,7 @@ function ValidationParticipationForm(props){
                             InputProps={{
                                 readOnly: true,
                               }}
-                            defaultValue={body.state}
+                            defaultValue={body.year}
                             name="year"
                             id="outlined-required"
                             label="Year"
@@ -165,7 +168,7 @@ function ValidationParticipationForm(props){
                             InputProps={{
                                 readOnly: true,
                               }}
-                            defaultValue={body.pincode}
+                            defaultValue={body.branch}
                             name="branch"
                             id="outlined-required"
                             label="Branch"
@@ -177,7 +180,7 @@ function ValidationParticipationForm(props){
                             InputProps={{
                                 readOnly: true,
                               }}
-                            defaultValue={body.pincode}
+                            defaultValue={body.clubname}
                             name="clubname"
                             id="outlined-required"
                             label="Club Name"

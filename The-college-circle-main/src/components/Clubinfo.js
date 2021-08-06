@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUser, faEnvelope } from '@fortawesome/free-regular-svg-icons'
+import { faUser, faEnvelope, faMap, faCalendar } from '@fortawesome/free-regular-svg-icons'
 //import {getClubById} from './connection'
 import { Grid } from '@material-ui/core';
 import Divider from '@material-ui/core/Divider';
@@ -9,8 +8,9 @@ import Forme from './Register_Participant_Form'
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles';
-import {getClubById} from './connection'
+import {getClubById,getevent} from './connection'
 import {withRouter} from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -93,23 +93,53 @@ function Clubinfo(){
     }
      const apply=()=>{
         setAopen(true)
-        
      }
 
     const [data,setData] = React.useState([])
+    const [eventdata,seteventData] = React.useState([])
 
-    const getclubData = React.useCallback(()=>{
+    const getclubData = React.useRef(()=>{});
+
+    getclubData.current = async() => {
         var collegename = localStorage.getItem("collegename")
         getClubById(collegename)
         .then(async(res)=>{
             await setData(res.data.result)
-            console.log("L",res)
+            geteventData(res.data.result[0].name);
+        })
+        .catch(err=>console.log(err));
+    };
+
+    const geteventData = (clubName) => {
+        console.log("suvansh",clubName)
+        getevent(clubName)
+        .then(async(res)=>{
+            console.log("suvansh_a",res)
+            await seteventData(res.data.result)
         })
         .catch(err=>console.log(err))
-    },[localStorage.getItem("collegename")])
+    };
+
+    const EventComponent = () => {
+    return (<div>
+    <Grid container style={{display:"flex",flexDirection:"column",width:"1000px"}}>
+        <h1 style={{color:'blue'}}>List Of Events</h1>
+        {eventdata.map((value)=>{
+            return(
+                <div style={{display:'flex',flexDirection:'column',alignItems:'flex-start',backgroundColor:'#FFFAA0',width:'900px',borderLeft:'10px solid red',padding:'30px',margin:'20px'}}>
+                    
+                    <span style={{marginBottom: '5px',fontSize: '32px',fontWeight: 700,}}>{value.eventname}</span>
+                    <span>{value.eventdesc}</span>
+                    <span><FontAwesomeIcon icon="clock"  />{value.time}</span>
+                    <span><FontAwesomeIcon icon="map-marker-alt" />{value.venue}</span>
+                    
+                </div>
+            )})}
+    </Grid>
+</div>)}
     
     useEffect(()=>{
-        getclubData()
+        getclubData.current();
     },[])
 
     if(data.length === 0)
@@ -118,7 +148,7 @@ function Clubinfo(){
     }
     else{
     return(
-        <section id="clubDetails">
+        <div id="clubDetails" style={{margin:"5%"}}>
             <div className={classes.uppersection}>
                 <div className="row">
                     <div className="col-md-6">
@@ -145,6 +175,7 @@ function Clubinfo(){
                             </p>
                             <hr />
                             <div style={{display:"flex", flexDirection:"column",width:"100%",alignItems:"center"}}>
+                                <h1 style={{color:'blue'}}>Become the active member of the club</h1>
                                 <div className={classes.buttondesign}>
                                 <Button 
                                     variant="contained" 
@@ -166,47 +197,16 @@ function Clubinfo(){
                                     Add Event
                                 </Button>
                             </div>
-                            <div>
-                                <Grid container style={{display:"flex",flexDirection:"column",width:"1000px"}}>
-                                    {data.map((value)=>{
-                                        return(
-                                            <div className={classes.root}>
-                                                    <div className={classes.section1}>
-                                                        <Grid container alignItems="center">
-                                                        <Grid item xs>
-                                                            <Typography gutterBottom variant="h4">
-                                                            {value.eventname}
-                                                            </Typography>
-                                                        </Grid>
-                                                        
-                                                        </Grid>
-                                                        <Typography color="textSecondary" variant="body2">
-                                                        {value.eventdesc}
-                                                        </Typography>
-                                                    </div>
-                                                    <Divider variant="middle" />
-                                                    <div className={classes.section2}>
-                                                        <Typography gutterBottom variant="body1">
-                                                            <span><i className="fas fa-map-marker">{value.venue}</i></span>
-                                                        </Typography>
-                                                        <Typography gutterBottom variant="body1">
-                                                            <span><i className="far fa-calendar">{value.time}</i></span>
-                                                        </Typography>
-
-                                                    </div>
-                                            </div>
-                                        )})}
-                                </Grid>
                             </div>
-                            </div>
+                            {eventdata?EventComponent():null}
                         </div>
                     </div>
                 </div>
             </div>
-            <Form open={open} setOpen={setOpen}/>
+            <Form clubName={data[0].name} open={open} setOpen={setOpen}/>
             <Forme aopen={aopen} setAopen={setAopen}/>
              
-        </section>
+        </div>
     )
 }
     

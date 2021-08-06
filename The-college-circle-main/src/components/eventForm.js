@@ -12,10 +12,9 @@ import Slide from '@material-ui/core/Slide';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import { classes } from 'istanbul-lib-coverage'
-
 import {useForm} from 'react-hook-form'
 import Avatar from '@material-ui/core/Avatar'
-import {addClubById} from './connection'
+import {addClubevent} from './connection'
 
 const styles = (theme) => ({
   root: {
@@ -77,6 +76,7 @@ const DialogActions = withStyles((theme) => ({
 
 export default function FormTable(props) {
 
+  const { clubName } = props;
   const {handleSubmit,register} = useForm()
   const [img,setImg] = React.useState({icon:"",file:""})
 
@@ -86,30 +86,14 @@ export default function FormTable(props) {
   };
 
   const onSubmit = async(body) =>{
-    // var collegename = localStorage.getItem("collegename")
-    // body.collegename = collegename
-    // body.file = img.file
-    // console.log("KL:",body)
-    // addcompany(body)
-    // .then(res=>{
-    //   alert("company saved")
-    // handleClose()})
-    // .catch(err=>alert("try again"))
-
-    var formData=new FormData();
-        
-        formData.append('collegename',localStorage.getItem("collegename"))
-        formData.append('eventname',body.eventname)
-        formData.append('eventdesc',body.eventdesc)
-        formData.append('venue',body.venue)
-        formData.append('time',body.time)
-        
-
-        await addClubById(formData)
-        .then(res=>{
-          alert("event saved")
+      var collegename = localStorage.getItem("collegename")
+      body.collegename = collegename
+      body.clubname = clubName
+      await addClubevent(body)
+      .then(res=>{
+        alert("event saved");
         handleClose()})
-        .catch(err=>{alert("try again");console.log("Error:",err.response)})
+      .catch(err=>{alert("try again");console.log("Error:",err.response)})
   }
 
 //   React.useEffect(()=>{

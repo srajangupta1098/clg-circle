@@ -90,22 +90,15 @@ export default function FormTable(props) {
   };
 
   const onSubmit = async(body) =>{
-    var formData=new FormData();
-        
-        formData.append('collegename',localStorage.getItem("collegename"))
-        formData.append('studentname',body.studentname)
-        formData.append('rollno',body.rollno)
-        formData.append('year',body.year)
-        formData.append('branch',body.branch)
-        formData.append('clubname',body.clubname)
-        handleClose();
-        setAopen({backdrop:true});
-        await participantregistration(formData)
-        .then(res=>{
-          alert("participant need to wait")})
-        .catch(err=>{alert("try again");console.log("Error:",err.response)})
-        setAopen({backdrop:false})
-        setAopen({snackbar:true})
+    body.collegename = localStorage.getItem("collegename")
+    handleClose();
+    console.log("ASD:",body)
+    setAopen({backdrop:true});
+    await participantregistration(body)
+    .then(res=>{alert("participant need to wait")})
+    .catch(err=>{alert("try again");console.log("Error:",err.response)})
+    setAopen({backdrop:false})
+    setAopen({snackbar:true})
         
   }
   // const { aopen, setAopen } = props
@@ -114,7 +107,7 @@ export default function FormTable(props) {
 
   useEffect(()=>{
     setOpen(props.aopen)
-  },[props])
+  },[props.aopen])
 
   return (
     <div>

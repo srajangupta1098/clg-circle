@@ -67,7 +67,7 @@ export default function Register_Form(props){
     const [membertype,setMembertype] = React.useState("Student");
     const [collegename,setCollegeName] = React.useState();
     // const [list_college_name,setList_college_name] = React.useState([])
-    const list_college_name = ["Japyee University Of Engineering And Technology","Lovely Professional University","Amity University"]
+    const list_college_name = ["Japyee University Of Engineering And Technology","Lovely Professional University","Amity University","ITM Unviversity"]
 
     const handleChangeCollegeName = (e) =>{
         setCollegeName(e.target.value)

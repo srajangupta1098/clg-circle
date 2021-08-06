@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import {BrowserRouter as Router,Redirect,Route,Switch} from 'react-router-dom'
 import FrontPage from './FrontPage';
 import RCF from './Register_College_Form';
-
+import VPF from './participantvalidationform';
 import RF from './Register_Form'
 import LF from './Login'
 import VCF from './validationform'
@@ -46,6 +46,7 @@ export default function Main(props){
             <Route exact path="/RegisterForm" component={RF} history={props.history}/>
             <Route exact path ="/Login" component={() => <LF changeView={changeView}/>}/>
             <Route exact path="/validationform/:id" component={VCF} history={props.history}/>
+            <Route exact path="/participantvalidationform/:id" component={VPF} history={props.history}/>
             <Route exact path="/The_College_Circle" component={()=><PostPage changeView={changeView}/>} history={props.history} />
             <Route exact path="/The_College_Circle/Placement" component={Placement} history={props.history}/>
             <Route exact path="/The_College_Circle/Alumni" component={Alumni} history={props.history}/>

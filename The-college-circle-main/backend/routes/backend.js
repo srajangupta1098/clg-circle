@@ -11,6 +11,7 @@ var ClubSchema = require('./schema/addclubSchema');
 var EventSchema = require('./schema/eventSchema');
 var ParticipantSchema = require('./schema/clubparticipantSchema');
 const { useRadioGroup } = require('@material-ui/core');
+const { error } = require('console');
  
 
 
@@ -38,8 +39,8 @@ exports.collegeRegistraion = async(req,res)=>{
             });
         
             let mailOptions ={
-                from :'TheCollegeCircle',
-                to:'s22ubbu@yahoo.com',
+                from :'thedailyofferjuet@gmail.com',
+                to:'srajagupta28@gmail.com',
                 subject:'mail for authentication at college circle',
                 text:link
             };
@@ -348,41 +349,48 @@ exports.getClubById= async (req, res) => {
   }
 
 
-  exports.addClubById= function (req,res){
-      const id = req.params.id;
-      EventSchema.create(req.body)
-      
-      .then(function(foundevent){
-
-        return ClubSchema.findByIdAndUpdate({_id:id},{event:foundevent._id},{new:true});
+  exports.addClubevent= async (req,res)=>{
+      console.log("check:",req.body)
+      await ClubSchema.findOne({name:req.body.clubname}).then((club)=>{
+          const newData= new EventSchema(req.body)
+          newData.save((error,result)=>{
+              if(error)
+              {
+                console.log(error)
+                return res.status(400).send({error:'Data Error',message:"Try again"})
+              }
+              else
+              { 
+                console.log('Event saved')
+                club.events.push(result.id);
+                club.save((error,result)=>{
+                    if (error) {
+                        return res.status(400).send({error:'databse error',message:'Try again'})
+                    }
+                    console.log("clubUpdate:",result)
+                    return res.status(201).json({success:true,message:"Event saved"})
+                })
+              }
+          })
       })
-      .then(function(foundClub){
-          res.json(foundClub);
-      })
-      .catch(function(err){
-          res.json(err);
-      });
   }
 
   exports.getevent = async(req,res)=>{
-    const collegename = req.params.name
-    console.log("LL",collegename)
-    await EventSchema.find({collegename:collegename},(error,result)=>{
+    await EventSchema.find({clubname:req.params.name},(error,result)=>{
         if(error)
-        {
-            return res.status(402).send({message:"college not found"})
+        {   
+            console.log("ABCD")
+            return res.status(402).send({message:" not found"})
         }
         else
         {
-            console.log("AS:",result)
-            return res.status(200).send({result})
+            return res.status(200).send({message:"data retrieved",result})
         }
     })
 }
 
 exports.participantregistration = async(req,res)=>{
-    await ClubSchema.findOne({name:req.body.name}).then((club)=>{
-        
+    await ClubSchema.findOne({name:req.body.clubname}).then((club)=>{
         const newData=new  ParticipantSchema(req.body)
         newData.save((error,result)=>{
             
@@ -393,9 +401,9 @@ exports.participantregistration = async(req,res)=>{
         }
         else
         {   
-
+            console.log("FF:",club)
             console.log("ASD:",result)
-            var link = `localhost:3000/validationform/${result._id}`
+            var link = `localhost:3000/participantvalidationform/${result._id}`
             var transporter=nodemailer.createTransport({
                 service: 'gmail',
                 secure:false,
@@ -431,15 +439,17 @@ exports.participantregistration = async(req,res)=>{
 
 exports.getparticipantregistration = async(req,res)=>{
     const id = req.params.id
-    console.log("ID:",id)
+    console.log("id:",id)
     ParticipantSchema.findById(id,(error,result)=>{
         if(error)
         {
             console.log("ASDF")
+            
             return res.status(422).send({message:"Not found"})
         }
         else
         {
+            console.log("data:",result)
             return res.status(200).send({message:"data retrieved",result})
         }
     });

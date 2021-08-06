@@ -7,8 +7,8 @@ export const staffregistration = (payload)=>api.post('/staffregistrationform',pa
 export const getcollegeregistrationform = (id) => api.get(`/getcollegeregistrationform/${id}`)
 export const deletecollegeregistration = (id) => api.delete(`/deletecollegeregistration/${id}`)
 export const approvecollegeregistration = (id) => api.get(`/approvecollegeregistration/${id}`)
-export const participantregistration = (payload)=>api.post('/participantregistrationform',payload)
-export const getparticipantregistrationform = (id) => api.get(`/getparticipantregistrationform/${id}`)
+export const participantregistration = (payload)=>api.post('/participantregistration',payload)
+export const getparticipantregistrationform = (id) => api.get(`/getparticipantregistration/${id}`)
 export const deleteparticipantRegistration = (id) => api.delete(`/deleteparticipantRegistration/${id}`)
 export const approveparticipantRegistration = (id) => api.get(`/approveparticipantRegistration/${id}`)
 export const login = (payload) =>api.post('/login',payload)
@@ -33,9 +33,6 @@ export const addclub = (payload) =>api.post('/addclub',payload, {
 })
 export const getclub = (name) => api.get(`/getclub/${name}`)
 export const getClubById = (name)=> api.get(`/getClubById/${name}`)
-export const addClubById = (payload) =>api.post('/addClubById',payload,{
-    headers: {
-        'content-type': 'multipart/form-data',
-    },
-})
+export const addClubevent = (payload) =>api.post('/addClubevent',payload)
+export const getevent = (name) => api.get(`/getevent/${name}`)
 export const getcollegename = () => api.get('/getcollegename')

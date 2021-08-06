@@ -10,7 +10,6 @@ var clubSchema = new Schema({
         type: String,
         minlength: [4, 'Invalid length! Minimum is 4 characters'],
         maxlength: [32, 'Invalid length! Maximum is 32 characters'],
-        unique: true,
         lowercase: true,
         required: 'Email is required!',
         match: [/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/]

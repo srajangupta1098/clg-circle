@@ -6,7 +6,7 @@ const multer = require("./schema/multer")
 
 
 router.post('/collegeregistrationform',backendrouter.collegeRegistraion)
-router.post('/participantregistrationform',backendrouter.participantregistration)
+router.post('/participantregistration',backendrouter.participantregistration)
 router.post('/staffregistrationform',backendrouter.staffRegistration)
 router.get('/getcollegeregistrationform/:id',backendrouter.getcollegeregistration)
 router.delete('/deletecollegeregistration/:id',backendrouter.deletecollegeRegistration)
@@ -25,4 +25,6 @@ router.post('/addclub', multer.single('img'),backendrouter.addclub)
 router.get('/getclub/:name',backendrouter.getclub)
 router.get('/getcollegename',backendrouter.getCollegename)
 router.get('/getClubById/:name',backendrouter.getClubById)
+router.post('/addClubevent',backendrouter.addClubevent)
+router.get('/getevent/:name',backendrouter.getevent)
 module.exports = router

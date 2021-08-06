@@ -13,6 +13,7 @@ import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import {useForm} from "react-hook-form"
 import {login} from './connection'
+import {getcollegename} from './connection'
 import {withRouter} from 'react-router-dom'
  
 const useStyles = makeStyles((theme) => ({
@@ -57,8 +58,10 @@ function Login_Form(props){
     const {register,handleSubmit,errors} = useForm({criteriaMode:"all"})
     const [membertype,setMembertype] = React.useState("Student");
     const [collegename,setCollegeName] = React.useState();
-    const list_college_name = ["Japyee University Of Engineering And Technology","Lovely Professional University","Amity University"]
-
+    const list_college_name = ["Japyee University Of Engineering And Technology","Lovely Professional University","Amity University","ITM University"]
+    
+    //console.log("srajan:",list_college_name)
+    
     const handleChangeCollegeName = (e) =>{
         setCollegeName(e.target.value)
     }
